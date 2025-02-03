@@ -31,8 +31,8 @@ export class UsersService {
       const comparePassword=bcrypt.compare(password,hashedPassword)
       return comparePassword
   }
-  async createToken(email:string):Promise<string>{
-    const token=await jwt.sign({email},process.env.TOKEN_SECRET,{expiresIn:'7d'})
+  async createToken(name:string,id:number):Promise<string>{
+    const token=await jwt.sign({name,id},process.env.TOKEN_SECRET,{expiresIn:'7d'})
     return token
   }
 }

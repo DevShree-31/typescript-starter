@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.model';
-import { log } from 'console';
 
 @Controller('auth')
 export class UsersController {
@@ -42,7 +41,7 @@ export class UsersController {
         if(!validatePassword){
             throw new HttpException({message:"Invalid credentials"},HttpStatus.BAD_REQUEST)
         }
-        const token=await this.usersService.createToken(loginUserDto.email)
+        const token=await this.usersService.createToken(user.name,user.id)
          return {token,message:"user created successfully",status:HttpStatus.OK}
     }
 }
