@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt'
 import { hash } from 'crypto';
@@ -19,5 +19,11 @@ export class TasksServices {
   }
   async findById(id:number):Promise<Task>{
     return this.taskModel.findByPk(id)
+  }
+  async updateTask(taskId: number, updateTaskDto: { title?: string; description?: string; assignedTo?: number }): Promise<any> {
+    return{ updateTaskDto,message:this.taskModel.update(updateTaskDto,{where:{id:taskId}})};
+  }
+  async deleteTaskById(taskId:number):Promise<any>{
+    return this.taskModel.destroy({where:{id:taskId}})
   }
 }

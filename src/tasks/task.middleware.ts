@@ -3,11 +3,13 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken'
 import { ValidationError } from 'sequelize';
+interface customRequest extends Request{
+  decoded?:any
+}
 @Injectable()
 export class taskMiddleWare implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: customRequest, res: Response, next: NextFunction) {
     const authHeader = req.headers['authorization'];
-  console.log(authHeader,"auth");
   
   if (!authHeader) {
     return res.status(401).json({ message: 'Authorization header missing' });
@@ -21,8 +23,7 @@ export class taskMiddleWare implements NestMiddleware {
 console.log(token)
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-    req = decoded;
-    console.log(req)
+    req.decoded= decoded;
   } catch (error) {
     if (error instanceof ValidationError) {
         console.error('Validation Errors:');
